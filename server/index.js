@@ -14,16 +14,20 @@ const __dirname = dirname(__filename);
 
 const app = express();
 const httpServer = createServer(app);
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '*']
+  : ['http://localhost:5173', 'http://127.0.0.1:5173'];
+
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173']
+  origin: allowedOrigins
 }));
 app.use(express.json());
 
@@ -33,6 +37,16 @@ app.use('/uploads', express.static(join(__dirname, 'uploads')));
 // Routes
 app.use('/api/boards', boardsRouter);
 app.use('/api', notesRouter);
+
+// Serve static frontend in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(join(__dirname, '..', 'client', 'dist')));
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api') && !req.path.startsWith('/uploads') && !req.path.startsWith('/socket.io')) {
+      res.sendFile(join(__dirname, '..', 'client', 'dist', 'index.html'));
+    }
+  });
+}
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
