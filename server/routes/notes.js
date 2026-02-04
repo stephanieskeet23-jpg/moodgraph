@@ -48,7 +48,7 @@ router.get('/boards/:boardId/notes', (req, res) => {
 router.post('/boards/:boardId/notes', upload.single('image'), (req, res) => {
   try {
     const { boardId } = req.params;
-    const { content = '', position_x = 0, position_y = 0, color = '#fef08a', width = 200, height = 200 } = req.body;
+    const { title = '', content = '', position_x = 0, position_y = 0, color = '#fef08a', width = 300, height = 200 } = req.body;
 
     // Check if board exists
     const board = get('SELECT id FROM boards WHERE id = ?', [boardId]);
@@ -63,9 +63,9 @@ router.post('/boards/:boardId/notes', upload.single('image'), (req, res) => {
     }
 
     run(
-      `INSERT INTO notes (board_id, content, image_url, position_x, position_y, color, width, height)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [boardId, content, image_url, position_x, position_y, color, width, height]
+      `INSERT INTO notes (board_id, title, content, image_url, position_x, position_y, color, width, height)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [boardId, title, content, image_url, position_x, position_y, color, width, height]
     );
 
     // Get the most recently created note for this board
@@ -88,15 +88,16 @@ router.put('/notes/:id', upload.single('image'), (req, res) => {
       return res.status(404).json({ error: 'Note not found' });
     }
 
-    const { content, position_x, position_y, color, width, height } = req.body;
+    const { title, content, position_x, position_y, color, width, height } = req.body;
     let image_url = req.file ? `/uploads/${req.file.filename}` : (req.body.image_url !== undefined ? req.body.image_url : note.image_url);
 
     run(
       `UPDATE notes SET
-        content = ?, image_url = ?, position_x = ?, position_y = ?,
+        title = ?, content = ?, image_url = ?, position_x = ?, position_y = ?,
         color = ?, width = ?, height = ?, updated_at = datetime('now')
       WHERE id = ?`,
       [
+        title !== undefined ? title : note.title,
         content !== undefined ? content : note.content,
         image_url,
         position_x !== undefined ? position_x : note.position_x,

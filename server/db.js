@@ -35,6 +35,7 @@ export async function initDb() {
     CREATE TABLE IF NOT EXISTS notes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       board_id INTEGER NOT NULL,
+      title TEXT DEFAULT '',
       content TEXT DEFAULT '',
       image_url TEXT,
       position_x REAL DEFAULT 0,
@@ -47,6 +48,13 @@ export async function initDb() {
       FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE
     )
   `);
+
+  // Add title column if it doesn't exist (migration for existing databases)
+  try {
+    db.run(`ALTER TABLE notes ADD COLUMN title TEXT DEFAULT ''`);
+  } catch (e) {
+    // Column already exists, ignore
+  }
 
   // Create default board if none exists
   const result = db.exec('SELECT COUNT(*) as count FROM boards');

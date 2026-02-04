@@ -1,70 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Base styles */
 * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f3ff;
-  min-height: 100vh;
-  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
-/* Custom scrollbar */
+body {
+  margin: 0;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background-color: #FAF8F5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: #292524;
+  letter-spacing: -0.01em;
+}
+
+/* Paper texture overlay - more visible */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.055;
+  z-index: 9999;
+}
+
+/* Custom scrollbar - refined and subtle */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c084fc;
+  background: #D6D3D1;
   border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a855f7;
+  background: #A8A29E;
+  background-clip: content-box;
 }
 
-/* Sticky note shadow */
+/* Selection styling */
+::selection {
+  background: #7A3F3B;
+  color: #FAF8F5;
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid #7A3F3B;
+  outline-offset: 2px;
+}
+
+/* Sticky note styles */
 .sticky-note {
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.06), 0 4px 12px rgba(28, 25, 23, 0.04);
+  transition: box-shadow 0.2s ease;
+  border: 1px solid rgba(28, 25, 23, 0.06);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .sticky-note:hover {
-  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(28, 25, 23, 0.08), 0 1px 4px rgba(28, 25, 23, 0.04);
 }
 
 .sticky-note.dragging {
-  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 16px 40px rgba(28, 25, 23, 0.15), 0 4px 12px rgba(28, 25, 23, 0.08);
   z-index: 1000;
+  transition: box-shadow 0.15s ease;
+  opacity: 0.95;
 }
 
 /* Board grid */
 .board-container {
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 80px);
+  background-image:
+    radial-gradient(circle at 1px 1px, #E7E5E4 1px, transparent 0);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
 }
 
 /* Modal backdrop */
 .modal-backdrop {
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  background: rgba(28, 25, 23, 0.4);
 }
 
 /* Color picker button */
 .color-btn {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(28, 25, 23, 0.08);
 }
 
 .color-btn:hover {
@@ -73,18 +138,125 @@ body {
 
 .color-btn.selected {
   transform: scale(1.15);
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #7c3aed;
+  box-shadow: 0 0 0 2px #FAF8F5, 0 0 0 4px #7A3F3B;
+  border-color: transparent;
 }
 
 /* FAB button animation */
 .fab {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.25s ease;
 }
 
 .fab:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .fab:active {
-  transform: scale(0.95);
+  transform: scale(0.98);
+}
+
+/* Elegant link underlines */
+.link-hover {
+  position: relative;
+}
+
+.link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link-hover:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Staggered animation for lists */
+.stagger-item {
+  animation: slideUp 0.4s ease-out backwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 40ms; }
+.stagger-item:nth-child(3) { animation-delay: 80ms; }
+.stagger-item:nth-child(4) { animation-delay: 120ms; }
+.stagger-item:nth-child(5) { animation-delay: 160ms; }
+.stagger-item:nth-child(6) { animation-delay: 200ms; }
+.stagger-item:nth-child(7) { animation-delay: 240ms; }
+.stagger-item:nth-child(8) { animation-delay: 280ms; }
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Typography utilities */
+.font-editorial {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+/* Hairline borders */
+.hairline {
+  border-width: 0.5px;
+}
+
+/* Button base styles */
+.btn-primary {
+  background-color: #7A3F3B;
+  color: #FAF8F5;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+  background-color: #6A3533;
+  box-shadow: 0 4px 12px rgba(122, 63, 59, 0.25);
+}
+
+.btn-secondary {
+  background-color: #F5F2ED;
+  color: #292524;
+  border: 1px solid rgba(28, 25, 23, 0.1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-secondary:hover {
+  background-color: #EBE6DE;
+  border-color: rgba(28, 25, 23, 0.15);
+}
+
+/* Input styles */
+.input-field {
+  background-color: #FDFCFA;
+  border: 1px solid rgba(28, 25, 23, 0.12);
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: #7A3F3B;
+  box-shadow: 0 0 0 3px rgba(122, 63, 59, 0.12);
+}
+
+.input-field::placeholder {
+  color: #A8A29E;
 }

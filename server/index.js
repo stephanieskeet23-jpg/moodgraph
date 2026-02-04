@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -8,6 +9,8 @@ import { dirname, join } from 'path';
 import { initDb } from './db.js';
 import boardsRouter from './routes/boards.js';
 import notesRouter from './routes/notes.js';
+import imagesRouter from './routes/images.js';
+import textRouter from './routes/text.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,6 +40,8 @@ app.use('/uploads', express.static(join(__dirname, 'uploads')));
 // Routes
 app.use('/api/boards', boardsRouter);
 app.use('/api', notesRouter);
+app.use('/api/images', imagesRouter);
+app.use('/api/text', textRouter);
 
 // Serve static frontend in production
 if (process.env.NODE_ENV === 'production') {
