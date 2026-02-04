@@ -1,29 +1,21 @@
 <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="180" height="180" rx="40" fill="#7A3F3B"/>
+  <!-- Background - full bleed, iOS adds its own rounded corners -->
+  <rect width="180" height="180" fill="#7A3F3B"/>
 
-  <!-- Subtle texture overlay -->
-  <defs>
-    <filter id="noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/>
-    </filter>
-  </defs>
-  <rect width="180" height="180" rx="40" filter="url(#noise)" opacity="0.08"/>
-
-  <!-- Geometric cube logo -->
+  <!-- Geometric cube logo - scaled up to fill space -->
   <g transform="translate(90, 90)">
     <!-- Main cube shape -->
-    <path d="M0 -45 L-39 -22.5 L-39 22.5 L0 45 L39 22.5 L39 -22.5 Z"
+    <path d="M0 -60 L-52 -30 L-52 30 L0 60 L52 30 L52 -30 Z"
           fill="none"
           stroke="#FAF8F5"
-          stroke-width="3.5"
+          stroke-width="5"
           stroke-linejoin="round"/>
 
     <!-- Inner lines -->
-    <path d="M0 0 L-39 -22.5 M0 0 L0 45 M0 0 L39 -22.5"
+    <path d="M0 0 L-52 -30 M0 0 L0 60 M0 0 L52 -30"
           fill="none"
           stroke="#FAF8F5"
-          stroke-width="3.5"
+          stroke-width="5"
           stroke-linejoin="round"/>
   </g>
 </svg>
