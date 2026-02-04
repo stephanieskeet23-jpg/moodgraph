@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f3ff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c084fc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a855f7;
+}
+
+/* Sticky note shadow */
+.sticky-note {
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.sticky-note:hover {
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.sticky-note.dragging {
+  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+}
+
+/* Board grid */
+.board-container {
+  min-height: calc(100vh - 120px);
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+}
+
+/* Color picker button */
+.color-btn {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+}
+
+.color-btn.selected {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #7c3aed;
+}
+
+/* FAB button animation */
+.fab {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fab:hover {
+  transform: scale(1.05);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
